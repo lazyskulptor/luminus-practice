@@ -1,0 +1,16 @@
+/guestbook/target
+/guestbook/lib
+/guestbook/classes
+/guestbook/checkouts
+pom.xml
+dev-config.edn
+test-config.edn
+*.jar
+*.class
+/guestbook/.lein-*
+profiles.clj
+/guestbook/.env
+.nrepl-port
+
+/guestbook/node_modules
+/guestbook/log
