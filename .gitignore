@@ -19,3 +19,6 @@ test-config.edn
 
 **/.hgignore
 **/.hg/
+
+**/.clj-kondo
+**/.lsp
