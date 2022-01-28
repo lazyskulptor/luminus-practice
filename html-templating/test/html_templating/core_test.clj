@@ -46,3 +46,9 @@
 (deftest include-template
   (testing "includes template"
     (is (clojure.string/includes?  (fn-6-1) "form action=\"/register"))))
+
+(deftest error-handling
+  (testing "handling error"
+    (is (let [body ((renderer) "error.html")]
+          (and (clojure.string/includes? body "Template Compilation Error")
+               (clojure.string/includes? body "{{content|safea}}"))))))

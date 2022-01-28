@@ -1,7 +1,8 @@
 (ns html-templating.core
   (:require
    [selmer.parser :as selmer]
-   [selmer.filters :as filters]))
+   [selmer.filters :as filters]
+   [selmer.middleware :refer [wrap-error-page]]))
 
 (filters/add-filter! :empty? empty?)
 (filters/add-filter! :foo
@@ -47,3 +48,10 @@
 
 (defn fn-6-1 []
   (selmer/render-file "hello-4.html" {:name "World" :items (range 10)}))
+
+(defn renderer []
+  (wrap-error-page
+   (fn [template]
+     {:status 200
+      :body (selmer/render-file template {})})))
+                                
