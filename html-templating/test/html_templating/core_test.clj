@@ -20,3 +20,11 @@
 (deftest use-map
   (testing "Using HTML File with map"
     (is (= "<p>Hello John Doe</p>" (fn-2-3)))))
+
+(deftest use-filter
+  (testing "Using Filter"
+    (is (= "no files" (fn-3-1)))))
+
+(deftest use-filter-2
+  (testing "Filter is safe"
+    (is (= "<DIV>I'M SAFE</DIV>" (fn-3-2)))))

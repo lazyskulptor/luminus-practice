@@ -1,6 +1,11 @@
 (ns html-templating.core
   (:require
-   [selmer.parser :as selmer]))
+   [selmer.parser :as selmer]
+   [selmer.filters :as filters]))
+
+(filters/add-filter! :empty? empty?)
+(filters/add-filter! :foo
+                     (fn [x] [:safe (.toUpperCase x)]))
 
 (defn fn-1 []
   (selmer/render "Hello, {{name}}" {:name "World"}))
@@ -14,3 +19,9 @@
 (defn fn-2-3 []
   (selmer/render "<p>Hello {{user.first}} {{user.last}}</p>"
                  {:user {:first "John" :last "Doe"}}))
+
+(defn fn-3-1 []
+  (selmer/render "{% if files|empty? %}no files{% else %}files{% endif %}" {:files []}))
+
+(defn fn-3-2 []
+  (selmer/render "{{x|foo}}" {:x "<div>I'm safe</div>"}))
