@@ -25,3 +25,19 @@
 
 (defn fn-3-2 []
   (selmer/render "{{x|foo}}" {:x "<div>I'm safe</div>"}))
+
+(selmer/add-tag! :image
+                 (fn [args context-map]
+                   (str "<img src=" (first args) "/>")))
+
+(defn fn-4-1 []
+  (selmer/render "{% image \"http://foo.com/logo.jpg\" %}" {}))
+
+(selmer/add-tag! :uppercase
+                 (fn [args context-map block]
+                   (.toUpperCase (get-in block [:uppercase :content])))
+                 :enduppercase)
+
+(defn fn-4-2 []
+  (selmer/render "{% uppercase %}foo {{bar}} baz{% enduppercase %}"
+                 {:bar "injected"}))

@@ -28,3 +28,11 @@
 (deftest use-filter-2
   (testing "Filter is safe"
     (is (= "<DIV>I'M SAFE</DIV>" (fn-3-2)))))
+
+(deftest define-custom-tag
+  (testing "Custom tag"
+    (is (= "<img src=\"http://foo.com/logo.jpg\"/>" (fn-4-1)))))
+
+(deftest define-custom-block-tag
+  (testing "Custom block tag"
+    (is (= "FOO INJECTED BAZ" (fn-4-2)))))
