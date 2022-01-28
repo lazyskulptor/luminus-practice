@@ -44,3 +44,6 @@
 
 (defn fn-5-1 []
   (selmer/render-file "hello-3.html" {:name "World" :items (range 10)}))
+
+(defn fn-6-1 []
+  (selmer/render-file "hello-4.html" {:name "World" :items (range 10)}))

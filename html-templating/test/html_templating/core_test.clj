@@ -41,5 +41,8 @@
   (testing "Extend template"
     (is (= "<!-- -*- engine:selmer -*- -->\n<html>\n    <head>\n        <link rel=\"stylesheet\" href=\"style.css\" />\n        <title>My amazing site</title>\n    </head>\n    <body>\n        <div id=\"content\">\n            \n    default content\n    <h2>Hello World</h2>\n    <ul>\n        \n            <li>0</li>\n        \n            <li>1</li>\n        \n            <li>2</li>\n        \n            <li>3</li>\n        \n            <li>4</li>\n        \n            <li>5</li>\n        \n            <li>6</li>\n        \n            <li>7</li>\n        \n            <li>8</li>\n        \n            <li>9</li>\n        \n    </ul>\n\n        </div>\n    </body>\n</html>\n" (fn-5-1))))
   (testing "includes parent content"
-    (is (clojure.string/includes?  (fn-5-1) "default content")))
-  )
+    (is (clojure.string/includes?  (fn-5-1) "default content"))))
+
+(deftest include-template
+  (testing "includes template"
+    (is (clojure.string/includes?  (fn-6-1) "form action=\"/register"))))
