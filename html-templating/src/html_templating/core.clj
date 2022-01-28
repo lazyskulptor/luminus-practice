@@ -41,3 +41,6 @@
 (defn fn-4-2 []
   (selmer/render "{% uppercase %}foo {{bar}} baz{% enduppercase %}"
                  {:bar "injected"}))
+
+(defn fn-5-1 []
+  (selmer/render-file "hello-3.html" {:name "World" :items (range 10)}))
