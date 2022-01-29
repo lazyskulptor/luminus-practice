@@ -1,11 +1,39 @@
 (ns guestbook.core
   (:require [reagent.core :as r]
             [reagent.dom :as dom]
+            [re-frame.core :as rf]
             [ajax.core :refer [GET POST]]
             [clojure.string :as string]
             [guestbook.validation :refer [validate-message]]))
 
-(defn send-message! [fields errors messages]
+(rf/reg-event-fx
+ :app/initialize
+ (fn [_ _]
+   {:db {:messages/loading? true}}))
+
+(rf/reg-event-db
+ :messages/set
+ (fn [db [_ messages]]
+   (-> db
+       (assoc :messages/loading? false
+              :messages/list messages))))
+
+(rf/reg-sub
+ :messages/list
+ (fn [db _]
+   (:messages/list db [])))
+
+(rf/reg-event-db
+ :message/add
+ (fn [db [_ message]]
+   (update db :messages/list conj message)))
+
+(rf/reg-sub
+ :messages/loading?
+ (fn [db _]
+   (:messages/loading? db)))
+
+(defn send-message! [fields errors]
   (if-let [validation-erros (validate-message @fields)]
     (reset! errors validation-erros)
     (POST "/message"
@@ -15,18 +43,18 @@
           "x-csrf-token" (.-value (.getElementById js/document "token"))}
          :params @fields
          :handler (fn [_]
-                    (swap! messages conj (assoc @fields
-                                                :timestamp (js/Date.)))
+                    (rf/dispatch
+                     [:message/add (assoc @fields :timestamp (js/Date.))])
                     (reset! fields nil)
                     (reset! errors nil))
          :error-handler (fn [e]
                           (.log js/console (str e))
                           (reset! errors (-> e :response :errors)))})))
 
-(defn get-messages [messages]
+(defn get-messages []
   (GET "/messages"
        {:headers {"Accept" "application/transit+json"}
-        :handler #(reset! messages (:messages %))}))
+        :handler #(rf/dispatch [:messages/set (:messages %)])}))
 
 (defn message-list [messages]
   (println messages)
@@ -67,19 +95,23 @@
                              assoc :message (-> % .-target .-value))}]]
        [:input.button.is-primary
         {:type :submit
-         :on-click #(send-message! fields errors messages)
+         :on-click #(send-message! fields errors)
          :value "comment"}]])))
 
 (defn home []
-  (let [messages (r/atom nil)]
-    (get-messages messages)
+  (let [messages (rf/subscribe [:messages/list])]
+    (rf/dispatch [:app/initialize])
+    (get-messages)
     (fn []
-      [:div.content>div.columns.is-centered>div.column.is-two-thirds
-       [:div.columns>div.column
-        [:h3 "Messages"]
-        [message-list messages]]
-       [:div.columns>div.column
-        [message-form messages]]])))
+      (if @(rf/subscribe [:messages/loading?])
+        [:div>div.row>div.span12>h3
+         "Loading Messages..."]
+        [:div.content>div.columns.is-centered>div.column.is-two-thirds
+         [:div.columns>div.column
+          [:h3 "Messages"]
+          [message-list messages]]
+        [:div.columns>div.column
+          [message-form messages]]]))))
 
 (dom/render
  [home]
