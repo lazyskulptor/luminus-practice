@@ -33,6 +33,7 @@
                  [selmer "1.12.31"]
 
                  ;; clojurescript dependencies
+                 [cljs-ajax "0.8.1"]
                  [org.clojure/clojurescript "1.10.764" :scope "provided"]
                  [reagent "1.0.0"]]
 
