@@ -2,10 +2,13 @@
   (:require [reagent.core :as r]
             [reagent.dom :as dom]
             [ajax.core :refer [GET POST]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [guestbook.validation :refer [validate-message]]))
 
 (defn send-message! [fields errors]
-  (POST "/message"
+  (if-let [validation-erros (validate-message @fields)]
+    (reset! errors validation-erros)
+    (POST "/message"
         {:format :json
          :headers
          {"Accept" "application/transit+json"
@@ -16,7 +19,7 @@
                     (reset! errors nil))
          :error-handler (fn [e]
                           (.log js/console (str e))
-                          (reset! errors (-> e :response :errors)))}))
+                          (reset! errors (-> e :response :errors)))})))
 
 (defn errors-component [errors id]
   (when-let [error (id @errors)]
