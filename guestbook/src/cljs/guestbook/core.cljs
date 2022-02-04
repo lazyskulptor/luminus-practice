@@ -36,7 +36,7 @@
 (defn send-message! [fields errors]
   (if-let [validation-erros (validate-message @fields)]
     (reset! errors validation-erros)
-    (POST "/message"
+    (POST "/api/message"
         {:format :json
          :headers
          {"Accept" "application/transit+json"
@@ -52,7 +52,7 @@
                           (reset! errors (-> e :response :errors)))})))
 
 (defn get-messages []
-  (GET "/messages"
+  (GET "/api/messages"
        {:headers {"Accept" "application/transit+json"}
         :handler #(rf/dispatch [:messages/set (:messages %)])}))
 
