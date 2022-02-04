@@ -8,8 +8,7 @@
     [ring.middleware.webjars :refer [wrap-webjars]]
     [guestbook.env :refer [defaults]]
     [mount.core :as mount]
-    [guestbook.routes.services :refer [service-routes]]
-    [reitit.ring.middleware.dev :as dev]))
+    [guestbook.routes.services :refer [service-routes]]))
 
 (mount/defstate init-app
   :start ((or (:init defaults) (fn [])))
@@ -20,8 +19,7 @@
   (ring/ring-handler
     (ring/router
      [(home-routes)
-      (service-routes)]
-     {:reitit.middleware/transform dev/print-request-diffs})
+      (service-routes)])
     (ring/routes
       (ring/create-resource-handler
         {:path "/"})
