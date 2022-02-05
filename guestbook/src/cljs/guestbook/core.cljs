@@ -44,9 +44,7 @@
          :params @fields
          :handler (fn [_]
                     (rf/dispatch
-                     [:message/add (-> @fields
-                                       (assoc :timestamp (js/Date.))
-                                       (update :name str " [CLIENT]"))])
+                     [:message/add (assoc @fields :timestamp (js/Date.))])
                     (reset! fields nil)
                     (reset! errors nil))
          :error-handler (fn [e]
@@ -66,7 +64,7 @@
      [:li
       [:time (.toLocaleString timestamp)]
       [:p message]
-      [:p "@" name]])])
+      [:p " - " name]])])
 
 (defn errors-component [errors id]
   (when-let [error (id @errors)]
@@ -124,8 +122,6 @@
   (rf/dispatch [:app/initialize])
   (get-messages)
   (mount-components))
-
-(.log js/console "guestbook.core evaluated")
 
 (dom/render
  [home]
