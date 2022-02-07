@@ -66,6 +66,7 @@
    :project/dev  {:jvm-opts ["-Dconf=dev-config.edn" ]
                   :dependencies [[pjstadig/humane-test-output "0.10.0"]
                                  [cider/cider-nrepl "0.28.1" :scope "provided"]
+                                 [day8.re-frame/re-frame-10x "1.2.2"]
                                  [prone "2020-01-17"]
                                  [ring/ring-devel "1.8.2"]
                                  [ring/ring-mock "0.4.0"]
