@@ -9,7 +9,16 @@
 (rf/reg-event-fx
  :app/initialize
  (fn [_ _]
-   {:db {:messages/loading? true}}))
+   {:db {:messages/loading? true}
+    :dispatch [:messages/load]}))
+
+(rf/reg-event-fx
+ :messages/load
+ (fn [{:keys [db]} _]
+   (GET "/api/messages"
+        {:headers {"Accept" "application/transit+json"}
+         :handler #(rf/dispatch [:messages/set (:messages %)])})
+   {:db (assoc db :messages/loading? true)}))
 
 (rf/reg-event-db
  :messages/set
@@ -111,11 +120,6 @@
                         (get-in % [:response :errors])])})
    {:db (dissoc db :form/server-errors)}))
 
-(defn get-messages []
-  (GET "/api/messages"
-       {:headers {"Accept" "application/transit+json"}
-        :handler #(rf/dispatch [:messages/set (:messages %)])}))
-
 (defn message-list [messages]
   (println messages)
   [:ul.messages
@@ -183,7 +187,6 @@
 (defn init! []
   (.log js/console "Initializing App...")
   (rf/dispatch [:app/initialize])
-  (get-messages)
   (mount-components))
 
 (dom/render
