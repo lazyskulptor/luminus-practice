@@ -32,6 +32,7 @@
                  [ring/ring-core "1.8.2"]
                  [ring/ring-defaults "0.3.2"]
                  [selmer "1.12.31"]
+                 [com.taoensso/sente "1.16.0"]
 
                  ;; clojurescript dependencies
                  [com.google.javascript/closure-compiler-unshaded "v20200830" :scope "provided"]
