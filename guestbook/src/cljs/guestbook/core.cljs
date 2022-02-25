@@ -5,7 +5,8 @@
             [ajax.core :refer [GET POST]]
             [clojure.string :as string]
             [guestbook.validation :refer [validate-message]]
-            [guestbook.websockets :as ws]))
+            [guestbook.websockets :as ws]
+            [mount.core :as mount]))
 
 (rf/reg-event-fx
  :app/initialize
@@ -106,7 +107,7 @@
 (rf/reg-event-fx
  :message/send!
  (fn [{:keys [db]} [_ fields]]
-   (ws/send-message! fields)
+   (ws/send! [:message/create! fields])
    {:db (dissoc db :form/server-errors)}))
 
 (defn handle-response! [response]
@@ -117,23 +118,6 @@
       (rf/dispatch [:message/add response])
       (rf/dispatch [:form/clear-fields response]))))
 
-;; (rf/reg-event-fx
-;;  :message/send!
-;;  (fn [{:keys [db]} [_ fields]]
-;;    (POST "/api/message"
-;;      {:format :json
-;;       :headers
-;;       {"Accept" "application/transit+json"
-;;        "x-csrf-token" (.-value (.getElementById js/document "token"))}
-;;       :params fields
-;;       :handler #(rf/dispatch
-;;                  [:message/add
-;;                   (-> fields
-;;                       (assoc :timestamp (js/Date.)))])
-;;       :error-handler #(rf/dispatch
-;;                        [:form/set-server-errors
-;;                         (get-in % [:response :errors])])})
-;;    {:db (dissoc db :form/server-errors)}))
 
 (defn message-list [messages]
   (println messages)
@@ -212,9 +196,8 @@
 
 (defn init! []
   (.log js/console "Initializing App...")
+  (mount/start)
   (rf/dispatch [:app/initialize])
-  (ws/connect! (str "ws://" (.-host js/location) "/ws")
-               handle-response!)
   (mount-components))
 
 (dom/render
