@@ -22,3 +22,9 @@
 
 (defn get-user [ds id]
   (first (sql/query ds ["select * from users where id = ?" id])))
+
+(defn add-user! [ds user]
+  (sql/insert! ds :users user))
+
+(defn add-users! [ds users]
+  (sql/insert-multi! ds :users [:id :pass] users))
