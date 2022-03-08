@@ -35,3 +35,6 @@
    :users
    {:pass pass}
    ["id=?" id]))
+
+(defn remove-user! [ds id]
+  (sql/delete! ds :users ["id=?" id]))
