@@ -28,3 +28,10 @@
 
 (defn add-users! [ds users]
   (sql/insert-multi! ds :users [:id :pass] users))
+
+(defn set-pass! [ds id pass]
+  (sql/update!
+   ds
+   :users
+   {:pass pass}
+   ["id=?" id]))
