@@ -12,3 +12,10 @@
           :port 5454
           :user "admin"
           :password "admin"}))
+
+(defn create-users-table! [ds]
+  (jdbc/execute! ds
+                 ["create table users (
+                    id varchar(32) primary key,
+                    pass varchar(100)
+                    )"]))
