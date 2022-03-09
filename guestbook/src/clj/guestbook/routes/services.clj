@@ -1,5 +1,6 @@
 (ns guestbook.routes.services
   (:require
+   [spec-tools.data-spec :as ds]
    [guestbook.auth :as auth]
    [reitit.swagger :as swagger]
    [reitit.swagger-ui :as swagger-ui]
@@ -107,6 +108,22 @@
               (->
                (response/ok)
                (assoc :session nil)))}}]
+   ["/session"
+    {:get
+     {:responses
+      {200
+       {:body
+        {:session
+         {:identity
+          (ds/maybe
+           {:login string?
+            :created_at inst?})}}}}
+      :handler
+      (fn [{{:keys [identity]} :session}]
+        (response/ok {:session
+                      {:identity
+                       (not-empty
+                        (select-keys identity [:login :created_at]))}}))}}]
    ["/messages"
     {:get
      {:responses
