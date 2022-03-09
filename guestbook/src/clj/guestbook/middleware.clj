@@ -1,5 +1,6 @@
 (ns guestbook.middleware
   (:require
+    [guestbook.session :as session]
     [guestbook.env :refer [defaults]]
     [clojure.tools.logging :as log]
     [guestbook.layout :refer [error-page]]
@@ -42,5 +43,5 @@
       (wrap-defaults
         (-> site-defaults
             (assoc-in [:security :anti-forgery] false)
-            (assoc-in  [:session :store] (ttl-memory-store (* 60 30)))))
+            (assoc-in  [:session :store] session/store)))
       wrap-internal-error))
