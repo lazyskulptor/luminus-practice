@@ -31,7 +31,8 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.9.5"]
                  [ring/ring-defaults "0.3.3"]
-                 [selmer "1.12.50"]]
+                 [selmer "1.12.50"]
+                 [clj-pdf "2.5.5"]]
 
   :min-lein-version "2.0.0"
   
