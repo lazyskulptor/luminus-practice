@@ -6,7 +6,6 @@
   :dependencies [[ch.qos.logback/logback-classic "1.2.3"]
                  [cheshire "5.10.0"]
                  [clojure.java-time "0.3.2"]
-                 [com.h2database/h2 "1.4.200"]
                  [conman "0.9.1"]
                  [cprop "0.1.17"]
                  [expound "0.8.7"]
@@ -33,6 +32,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [selmer "1.12.31"]
                  [com.taoensso/sente "1.16.0"]
+                 [org.postgresql/postgresql "42.3.2"]
 
                  ;; clojurescript dependencies
                  [com.google.javascript/closure-compiler-unshaded "v20200830" :scope "provided"]
