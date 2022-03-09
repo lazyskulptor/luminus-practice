@@ -1,6 +1,7 @@
 (ns reporting-example.db.core
   (:require
     [cheshire.core :refer [generate-string parse-string]]
+    [next.jdbc.sql :as sql]
     [next.jdbc.date-time]
     [next.jdbc.prepare]
     [next.jdbc.result-set]
